@@ -31,5 +31,5 @@ B标题
 
 ## 5.链接
 *  支持2种链接方式：行内式和参数式，不管是哪一种，链接文字都是用 [方括号] 来标记。
-[行内式](https://github.com)
-[参数式] : https://github.com "github"
+> [行内式](https://github.com)
+> [参数式]: https://github.com "github"
