@@ -1,4 +1,4 @@
 
-##1.debug
-string = debug.traceback("message",level)
-string = debug.info(level)
+## 1.debug
+* string = debug.traceback("message",level)
+* string = debug.info(level)
