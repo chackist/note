@@ -16,11 +16,11 @@ class FileUtil:
 		typePath = cls.type(path)
 		if typePath == 0:
 			return False
-
 		if typePath == 1:
 			return os.remove(path)
 		else:
 			return shutil.rmtree(path)
+		return True
 
 	@classmethod
 	def exist(cls, path):
@@ -45,13 +45,36 @@ class FileUtil:
 	def mk(cls, path):
 		if not cls.exist(path):
 			os.mkdir(path)
+			return True
+		return False
 
 	#ab+ add wb+ cover
 	@classmethod
 	def write(cls, path, data, model):
-		outFp = open(path, model)
-		outFp.write(data)
-		outFp.close()
+		try:
+			fp = open(path, model)
+			fp.write(data)
+			fp.close()
+		except BaseException:
+			return False
+		else:
+			fp.close()
+		return True
+		
+
+	@classmethod
+	def read(cls, path, model):
+		try:
+			fp = open(path, model)
+			#fp.readlines()
+			data = ""
+			for x in fp:
+				data += x
+			return data
+		except BaseException:
+		    return ""
+		else:
+		    fp.close()
 
 	@classmethod
 	def remove(cls, srcPath, desPath):
@@ -86,10 +109,15 @@ class FileUtil:
 		return output.read()
 
 #typePath = FileUtil.typePath(path + "1")
-FileUtil.write(path + "1/3.txt", "123", "ab+	")
-FileUtil.write(path + "3.txt", "456", "ab+")
-FileUtil.mk(path + "1")
-FileUtil.remove(path + "1.txt",path + "2.txt")
-print(FileUtil.list(path))
-print(FileUtil.cmd("ifconfig"))
+# FileUtil.write(path + "1/3.txt", "123", "ab+")
+# FileUtil.write(path + "3.txt", "456\n", "ab+")
+# FileUtil.write(path + "1/3.txt", "123", "ab+")
+# FileUtil.write(path + "3.txt", "456\n", "ab+")
+# FileUtil.write(path + "1/3.txt", "123", "ab+")
+# FileUtil.write(path + "3.txt", "456\r\n", "ab+")
+# FileUtil.mk(path + "1")
+# FileUtil.remove(path + "1.txt",path + "2.txt")
+# print(FileUtil.list(path))
+# print(FileUtil.cmd("ifconfig"))
+#print(FileUtil.read(path + "3.txt","r"))
 #FileUtil.delete(path + "1")
