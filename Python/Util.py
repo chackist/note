@@ -1,9 +1,6 @@
 #coding=utf8
 import shutil
 import os
-
-path = "/Users/evan/Desktop/test/"
-
 class FileUtil:
 	TYPE_FILE = 1
 	TYPE_DIR = 2
@@ -103,21 +100,53 @@ class FileUtil:
 				array = array + cls.list(itemPath)
 		return array
 
-	@classmethod
-	def cmd(cls, cmd):
-		output = os.popen(cmd)
-		return output.read()
+class CommandUtil:
+	# \033[显示方式;前景色;背景色m
+	#显示方式 0 终端默认 1 高亮 4 下划线 5 闪缩 6 反白 7 不可见
+	# 前景色 30-37 背景色 40-47 黑 红 绿 黄 蓝 紫红 青蓝 白
+	def __init__(self, config):
+		self.config = config
+		self.tips = ""
+		self.command = {}
+		self.colors = ['\033[1;31m','\033[1;34m']
+		
+		index = 0
+		for v in self.config:
+			for subV in v:
+				self.tips += self.colors[index % len(self.colors)] +  "[" + subV["commond"] + "]: " + subV["name"] + " "
+				self.command[subV["commond"]] = subV["fun"]
+				index += 1
+			self.tips += "\n"
 
-#typePath = FileUtil.typePath(path + "1")
-# FileUtil.write(path + "1/3.txt", "123", "ab+")
-# FileUtil.write(path + "3.txt", "456\n", "ab+")
-# FileUtil.write(path + "1/3.txt", "123", "ab+")
-# FileUtil.write(path + "3.txt", "456\n", "ab+")
-# FileUtil.write(path + "1/3.txt", "123", "ab+")
-# FileUtil.write(path + "3.txt", "456\r\n", "ab+")
-# FileUtil.mk(path + "1")
-# FileUtil.remove(path + "1.txt",path + "2.txt")
-# print(FileUtil.list(path))
-# print(FileUtil.cmd("ifconfig"))
-#print(FileUtil.read(path + "3.txt","r"))
-#FileUtil.delete(path + "1")
+
+		self.tips += self.colors[index % len(self.colors)] + "[quit]: quit\n"
+		self.tips += "\033[1;0;0mInput: "
+
+	@classmethod
+	def cmd(cls, cmd, returnInfo):
+		if returnInfo:
+			output = os.popen(cmd)
+			return output.read()
+		else:
+			os.system(cmd)
+
+
+	def run(self):
+		while True:
+			opare = raw_input(self.tips)
+			if "quit" == opare :
+				break
+			else:
+				try:
+					commandItem = self.command[opare]
+					commandItem()
+				except Exception as e:
+					print(e)
+				finally:
+					pass
+
+
+
+
+
+
